@@ -47,8 +47,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-slate-800 py-6 text-center text-sm text-slate-400">
-        © {new Date().getFullYear()} GearNest.
-        All rights reserved.
+        © 2026 GearNest. All rights reserved.
       </div>
     </footer>
   );
