@@ -138,6 +138,32 @@
   --theme-shadow: #e1dcc91a;
 }
 
+.theme-deep-panel {
+  background-color: #064e3b;
+  color: #ffffff;
+}
+
+.dark .theme-deep-panel {
+  background-color: #000000;
+  color: #e1dcc9;
+}
+
+.theme-deep-panel .text-muted-foreground {
+  color: rgb(255 255 255 / 72%);
+}
+
+.dark .theme-deep-panel .text-muted-foreground {
+  color: rgb(225 220 201 / 72%);
+}
+
+.theme-deep-panel .text-primary {
+  color: #a7f3d0;
+}
+
+.dark .theme-deep-panel .text-primary {
+  color: var(--foreground);
+}
+
 /* =========================================
    GLOBAL BEHAVIOR
 ========================================= */

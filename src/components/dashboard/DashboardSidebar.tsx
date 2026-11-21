@@ -4,14 +4,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { Home, ShieldCheck, Wrench } from "lucide-react";
+
 import {
-  LayoutDashboard,
-  Package,
-  Heart,
-  UserRound,
-  Home,
-  Wrench,
-} from "lucide-react";
+  menuForRole,
+  roleLabel,
+  type UserRole,
+} from "@/lib/roles";
 
 import {
   Sidebar,
@@ -24,47 +23,49 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
-const menuItems = [
-  {
-    title: "Overview",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "My Rentals",
-    url: "/dashboard/customer/rentals",
-    icon: Package,
-  },
-  {
-    title: "Favorites",
-    url: "/dashboard/customer/favorites",
-    icon: Heart,
-  },
-  {
-    title: "My Profile",
-    url: "/dashboard/profile",
-    icon: UserRound,
-  },
-];
+type DashboardSidebarProps = {
+  role: UserRole | null;
+};
 
-export default function DashboardSidebar() {
+function isItemActive(pathname: string, url: string) {
+  if (url === "/dashboard") {
+    return pathname === "/dashboard";
+  }
+
+  return pathname === url || pathname.startsWith(`${url}/`);
+}
+
+export default function DashboardSidebar({
+  role,
+}: DashboardSidebarProps) {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const menuItems = role ? menuForRole(role) : [];
+
+  function handleNavigate() {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b p-4">
+    <Sidebar collapsible="icon" className="pt-20">
+      <SidebarHeader className="border-b border-sidebar-border p-2">
         <Link
-          href="/dashboard"
-          className="flex items-center gap-3 overflow-hidden"
+          href="/"
+          onClick={handleNavigate}
+          className="flex items-center justify-center gap-3 overflow-hidden rounded-md px-2 py-1.5 hover:bg-sidebar-accent md:justify-start"
         >
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-slate-950">
-            <Wrench size={20} />
-          </div>
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Wrench size={18} />
+          </span>
 
-          <span className="truncate text-xl font-bold">
-            GearNest
+          <span className="truncate text-lg font-extrabold tracking-tight text-foreground group-data-[collapsible=icon]:hidden">
+            Gear<span className="text-muted-foreground">Nest</span>
           </span>
         </Link>
       </SidebarHeader>
@@ -72,33 +73,58 @@ export default function DashboardSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
-            Dashboard Menu
+            {role ? roleLabel(role) : "Dashboard"}
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton
-                    render={<Link href={item.url} />}
-                    tooltip={item.title}
-                    isActive={pathname === item.url}
-                  >
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {!role ? (
+              <p className="px-2 py-3 text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
+                Sign in to load your dashboard menu.
+              </p>
+            ) : (
+              <SidebarMenu>
+                {menuItems.map((item) => (
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton
+                      render={<Link href={item.url} />}
+                      onClick={handleNavigate}
+                      tooltip={item.title}
+                      isActive={isItemActive(pathname, item.url)}
+                      aria-current={
+                        isItemActive(pathname, item.url)
+                          ? "page"
+                          : undefined
+                      }
+                    >
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t p-3">
+      <SidebarFooter className="border-t border-sidebar-border p-2">
+        {role ? (
+          <div className="flex items-center justify-center gap-2 rounded-md bg-sidebar-accent px-2 py-2 text-xs font-semibold text-foreground md:justify-start">
+            <ShieldCheck
+              className="size-4 shrink-0 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <span className="truncate group-data-[collapsible=icon]:hidden">
+              {role} Account
+            </span>
+          </div>
+        ) : null}
+
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               render={<Link href="/" />}
+              onClick={handleNavigate}
               tooltip="Back to Home"
             >
               <Home />

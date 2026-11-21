@@ -1,0 +1,108 @@
+{
+  "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg/960px-John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "thumbwidth": 800,
+  "thumbheight": 600,
+  "responsiveUrls": {
+    "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg/1920px-John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+  },
+  "thumbattribs": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg/960px-John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "decoding": "async",
+    "loading": "lazy",
+    "width": 800,
+    "height": 600,
+    "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg/1920px-John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+  },
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "descriptionurl": "https://commons.wikimedia.org/wiki/File:John_Deere_5075E_at_Arold_Service_M%C3%BCnchenbernsdorf.jpg",
+  "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/195957661",
+  "extmetadata": {
+    "DateTime": {
+      "value": "2026-07-21 06:50:44",
+      "source": "mediawiki-metadata",
+      "hidden": ""
+    },
+    "ObjectName": {
+      "value": "John Deere 5075E at Arold Service M\u00fcnchenbernsdorf",
+      "source": "mediawiki-metadata"
+    },
+    "CommonsMetadataExtension": {
+      "value": 1.2,
+      "source": "extension",
+      "hidden": ""
+    },
+    "Categories": {
+      "value": "John Deere 5075E|Self-published work|Tractors in Thuringia|Land vehicles in Germany photographed in 2026|Transport in M\u00fcnchenbernsdorf|Files with coordinates missing SDC location of creation (50\u00b0 N, 11\u00b0 E)|Germany photographs taken on 2026-07-18|2026 in Landkreis Greiz|July 2026 in transport in Thuringia",
+      "source": "commons-categories",
+      "hidden": ""
+    },
+    "Assessments": {
+      "value": "",
+      "source": "commons-categories",
+      "hidden": ""
+    },
+    "GPSLatitude": {
+      "value": "50.823165",
+      "source": "commons-desc-page"
+    },
+    "GPSLongitude": {
+      "value": "11.927147",
+      "source": "commons-desc-page"
+    },
+    "GPSMapDatum": {
+      "value": "WGS-84",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "ImageDescription": {
+      "value": "John Deere 5075E tractor displayed at the premises of Arold Service &amp; Vertrieb GmbH in M\u00fcnchenbernsdorf, Greiz district, Thuringia, Germany. The tractor is exhibited in front of the headquarters of the agricultural and municipal machinery dealer. Arold Service &amp; Vertrieb is an authorised John Deere sales and service partner for agricultural and municipal equipment in Thuringia and Saxony.",
+      "source": "commons-desc-page"
+    },
+    "DateTimeOriginal": {
+      "value": "2026-07-18 18:08:02",
+      "source": "commons-desc-page"
+    },
+    "Credit": {
+      "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+      "source": "commons-desc-page"
+    },
+    "Artist": {
+      "value": "<a href=\"//commons.wikimedia.org/wiki/User:Steffen_Mokosch\" title=\"User:Steffen Mokosch\">Steffen Mokosch</a>",
+      "source": "commons-desc-page"
+    },
+    "LicenseShortName": {
+      "value": "CC BY-SA 4.0",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "UsageTerms": {
+      "value": "Creative Commons Attribution-Share Alike 4.0",
+      "source": "commons-desc-page"
+    },
+    "AttributionRequired": {
+      "value": "true",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "LicenseUrl": {
+      "value": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "commons-desc-page"
+    },
+    "Copyrighted": {
+      "value": "True",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "Restrictions": {
+      "value": "",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "License": {
+      "value": "cc-by-sa-4.0",
+      "source": "commons-templates",
+      "hidden": ""
+    }
+  },
+  "mime": "image/jpeg"
+}

@@ -5,11 +5,17 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterPage() {
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState<
+    "google" | "github" | null
+  >(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -18,8 +24,21 @@ export default function RegisterPage() {
     password: "",
   });
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    e: FormEvent<HTMLFormElement>
+  ) {
     e.preventDefault();
+
+    if (loading) return;
+
+    const name = form.name.trim();
+    const email = form.email.trim().toLowerCase();
+    const image = form.image.trim();
+
+    if (!name || !email) {
+      toast.error("Name and email are required.");
+      return;
+    }
 
     const validPassword =
       form.password.length >= 6 &&
@@ -33,130 +52,279 @@ export default function RegisterPage() {
       return;
     }
 
+    if (image) {
+      try {
+        const parsedUrl = new URL(image);
+
+        if (
+          !["http:", "https:"].includes(parsedUrl.protocol)
+        ) {
+          throw new Error("Invalid image URL");
+        }
+      } catch {
+        toast.error("Please enter a valid profile photo URL.");
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
       const { error } = await authClient.signUp.email({
-        name: form.name.trim(),
-        email: form.email.trim(),
+        name,
+        email,
         password: form.password,
-        ...(form.image.trim()
-          ? { image: form.image.trim() }
-          : {}),
+        ...(image ? { image } : {}),
       });
 
       if (error) {
-        toast.error(error.message || "Registration failed");
+        toast.error(
+          error.message || "Registration failed."
+        );
         return;
       }
 
       toast.success("Account created successfully!");
-      router.push("/dashboard");
+
+      router.replace("/dashboard");
       router.refresh();
     } catch {
-      toast.error("Unable to connect to authentication server.");
+      toast.error(
+        "Unable to connect to authentication server."
+      );
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleSocialSignIn(
+    provider: "google" | "github"
+  ) {
+    if (loading || socialLoading) return;
+    setSocialLoading(provider);
+    try {
+      const { error } = await authClient.signIn.social({
+        provider,
+        callbackURL: `${window.location.origin}/dashboard`,
+      });
+      if (error) {
+        toast.error(
+          error.message ||
+            `Unable to sign up with ${provider}.`
+        );
+        setSocialLoading(null);
+      }
+    } catch {
+      toast.error(
+        "Unable to connect to authentication server."
+      );
+      setSocialLoading(null);
+    }
+  }
+
   const inputStyle =
-    "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-amber-500";
+    "w-full rounded-xl border border-input bg-card px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-60";
 
   return (
-    <main className="flex min-h-[80vh] items-center justify-center bg-slate-50 px-5 py-16">
-      <div className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-bold text-slate-900">
+    <main className="flex min-h-[80vh] items-center justify-center bg-background px-5 py-16">
+      <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-foreground shadow-sm">
+        <h1 className="text-3xl font-bold text-foreground">
           Create Your GearNest Account
         </h1>
 
-        <p className="mt-3 text-sm text-slate-500">
+        <p className="mt-3 text-sm text-muted-foreground">
           Join GearNest and start renting equipment.
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 space-y-5"
+        >
+          {/* Full Name */}
           <div>
-            <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            <label
+              htmlFor="name"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
               Full Name
             </label>
+
             <input
               id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
               required
+              maxLength={200}
+              disabled={loading}
               className={inputStyle}
               value={form.name}
               onChange={(e) =>
-                setForm({ ...form, name: e.target.value })
+                setForm((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }))
               }
               placeholder="Your full name"
             />
           </div>
 
+          {/* Email Address */}
           <div>
-            <label htmlFor="email" className="mb-2 block text-sm font-medium">
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
               Email Address
             </label>
+
             <input
               id="email"
+              name="email"
               type="email"
+              autoComplete="email"
               required
+              disabled={loading}
               className={inputStyle}
               value={form.email}
               onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
+                setForm((prev) => ({
+                  ...prev,
+                  email: e.target.value,
+                }))
               }
               placeholder="you@example.com"
             />
           </div>
 
+          {/* Profile Photo */}
           <div>
-            <label htmlFor="image" className="mb-2 block text-sm font-medium">
-              Profile Photo URL
+            <label
+              htmlFor="image"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
+              Profile Photo URL (Optional)
             </label>
+
             <input
               id="image"
+              name="image"
               type="url"
+              autoComplete="off"
+              disabled={loading}
               className={inputStyle}
               value={form.image}
               onChange={(e) =>
-                setForm({ ...form, image: e.target.value })
+                setForm((prev) => ({
+                  ...prev,
+                  image: e.target.value,
+                }))
               }
               placeholder="https://example.com/photo.jpg"
             />
           </div>
 
+          {/* Password */}
           <div>
-            <label htmlFor="password" className="mb-2 block text-sm font-medium">
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-foreground"
+            >
               Password
             </label>
+
             <input
               id="password"
+              name="new-password"
               type="password"
+              autoComplete="new-password"
               required
               minLength={6}
+              disabled={loading}
               className={inputStyle}
               value={form.password}
               onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
+                setForm((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }))
               }
               placeholder="Create a password"
             />
-            <p className="mt-2 text-xs text-slate-500">
-              Minimum 6 characters, uppercase and lowercase letters.
+
+            <p className="mt-2 text-xs text-muted-foreground">
+              Minimum 6 characters, uppercase and lowercase
+              letters.
             </p>
           </div>
 
-          <button
+          {/* Submit */}
+          <Button
             type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-amber-500 px-5 py-3 font-bold text-slate-950 hover:bg-amber-400 disabled:opacity-60"
+            loading={loading}
+            className="w-full"
           >
-            {loading ? "Creating Account..." : "Create Account"}
-          </button>
+            {loading
+              ? "Creating Account..."
+              : "Create Account"}
+          </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-600">
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-muted" />
+          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Or continue with
+          </span>
+          <div className="h-px flex-1 bg-muted" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            disabled={loading || socialLoading !== null}
+            onClick={() => void handleSocialSignIn("google")}
+            className="w-full gap-2"
+          >
+            {socialLoading === "google" ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <svg className="size-4" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
+            )}
+            Google
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            disabled={loading || socialLoading !== null}
+            onClick={() => void handleSocialSignIn("github")}
+            className="w-full gap-2"
+          >
+            {socialLoading === "github" ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.25.82-.56 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.33-1.73-1.33-1.73-1.09-.73.08-.72.08-.72 1.2.08 1.84 1.21 1.84 1.21 1.07 1.8 2.8 1.28 3.49.98.11-.76.42-1.28.76-1.57-2.67-.29-5.47-1.31-5.47-5.85 0-1.29.47-2.35 1.24-3.18-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.2a11.7 11.7 0 0 1 6 0c2.29-1.52 3.3-1.2 3.3-1.2.66 1.65.24 2.87.12 3.17.77.83 1.24 1.89 1.24 3.18 0 4.55-2.81 5.55-5.49 5.84.43.36.82 1.09.82 2.2 0 1.59-.01 2.88-.01 3.27 0 .31.22.68.83.56A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z" />
+              </svg>
+            )}
+            GitHub
+          </Button>
+        </div>
+
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="font-bold text-amber-700">
+          <Link
+            href="/login"
+            className="font-bold text-foreground hover:underline"
+          >
             Login
           </Link>
         </p>

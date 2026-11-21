@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { authFetch } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 
 const endpoints = [
   { name: "My Profile", path: "/api/dashboard/me" },
@@ -49,24 +50,25 @@ export default function AccessTestPage() {
         GearNest Role Access Test
       </h1>
 
-      <p className="mt-3 text-slate-500">
+      <p className="mt-3 text-muted-foreground">
         Test Customer, Owner and Admin permissions.
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {endpoints.map((item) => (
-          <button
+          <Button
             key={item.path}
             disabled={loading}
             onClick={() => handleTest(item.path)}
-            className="rounded-xl bg-slate-950 p-4 font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
+            variant="secondary"
+            className="h-auto min-h-12 whitespace-normal px-4 py-4"
           >
             Test {item.name}
-          </button>
+          </Button>
         ))}
       </div>
 
-      <pre className="mt-8 min-h-40 overflow-auto rounded-xl bg-slate-900 p-6 text-sm text-green-400">
+      <pre className="mt-8 min-h-40 overflow-auto rounded-xl bg-slate-900 p-6 text-sm text-muted-foreground">
         {result || "Click a button to test access"}
       </pre>
     </main>
