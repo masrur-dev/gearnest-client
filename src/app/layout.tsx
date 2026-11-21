@@ -1,20 +1,22 @@
-
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const heading = Poppins({
   subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const body = Roboto({
   subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,15 +31,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col font-sans antialiased`}
-      >
-        <Navbar />
+    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+      <body className="min-h-screen flex flex-col font-sans antialiased">
+        <Suspense fallback={<div className="h-20" />}>
+          <Navbar />
+        </Suspense>
 
-        <div className="flex-1">
-          {children}
-        </div>
+        <div className="flex-1">{children}</div>
 
         <Footer />
         <Toaster richColors position="top-right" />
