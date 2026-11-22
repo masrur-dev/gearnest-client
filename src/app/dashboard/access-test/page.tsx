@@ -68,7 +68,7 @@ export default function AccessTestPage() {
         ))}
       </div>
 
-      <pre className="mt-8 min-h-40 overflow-auto rounded-xl bg-slate-900 p-6 text-sm text-muted-foreground">
+      <pre className="mt-8 min-h-40 overflow-auto rounded-xl theme-deep-panel p-6 text-sm text-muted-foreground">
         {result || "Click a button to test access"}
       </pre>
     </main>

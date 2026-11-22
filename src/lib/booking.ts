@@ -53,15 +53,15 @@ type StatusMeta = {
 export const bookingStatusMeta: Record<BookingStatus, StatusMeta> = {
   pending_payment: {
     label: "Awaiting payment",
-    className: "bg-muted text-foreground",
+    className: "bg-accent text-accent-foreground",
   },
   confirmed: {
     label: "Confirmed",
-    className: "bg-muted text-foreground",
+    className: "bg-success text-success-foreground",
   },
   active: {
     label: "Active",
-    className: "bg-muted text-foreground",
+    className: "bg-success text-success-foreground",
   },
   completed: {
     label: "Completed",
@@ -69,7 +69,7 @@ export const bookingStatusMeta: Record<BookingStatus, StatusMeta> = {
   },
   cancelled: {
     label: "Cancelled",
-    className: "bg-red-100 text-red-700",
+    className: "bg-destructive/15 text-destructive",
   },
   expired: {
     label: "Expired",
@@ -77,7 +77,7 @@ export const bookingStatusMeta: Record<BookingStatus, StatusMeta> = {
   },
   refunded: {
     label: "Refunded",
-    className: "bg-muted text-foreground",
+    className: "bg-success text-success-foreground",
   },
 };
 
@@ -87,19 +87,19 @@ export const paymentStatusMeta: Record<
 > = {
   pending: {
     label: "Payment pending",
-    className: "bg-muted text-foreground",
+    className: "bg-accent text-accent-foreground",
   },
   paid: {
     label: "Paid",
-    className: "bg-muted text-foreground",
+    className: "bg-success text-success-foreground",
   },
   failed: {
     label: "Payment failed",
-    className: "bg-red-100 text-red-700",
+    className: "bg-destructive/15 text-destructive",
   },
   refunded: {
     label: "Refunded",
-    className: "bg-muted text-foreground",
+    className: "bg-success text-success-foreground",
   },
 };
 

@@ -98,6 +98,18 @@ export default function ProfileForm({ initial }: Props) {
   const [loadError, setLoadError] = useState("");
   const [dirty, setDirty] = useState(false);
 
+  const completionFields = [
+    form.name.trim(),
+    form.email.trim(),
+    form.image.trim(),
+    form.phone.trim(),
+    form.address.trim(),
+  ];
+  const completion = Math.round(
+    (completionFields.filter(Boolean).length / completionFields.length) * 100,
+  );
+  const completionCircumference = 2 * Math.PI * 27;
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -241,12 +253,12 @@ export default function ProfileForm({ initial }: Props) {
 
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center"
+          className="rounded-2xl border border-destructive/25 bg-destructive/10 p-8 text-center"
         >
-          <h2 className="font-bold text-red-700">
+          <h2 className="font-bold text-destructive">
             Unable to load your profile
           </h2>
-          <p className="mt-2 text-sm text-red-600">{loadError}</p>
+          <p className="mt-2 text-sm text-destructive">{loadError}</p>
         </div>
       </>
     );
@@ -259,20 +271,45 @@ export default function ProfileForm({ initial }: Props) {
         description="Update how you appear to renters and owners on GearNest."
       />
 
-      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="grid min-w-0 gap-4 sm:gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <div className="space-y-4">
-          <DashboardCard className="text-center">
-            <Avatar className="mx-auto size-20">
-              {form.image ? (
-                <AvatarImage
-                  src={form.image}
-                  alt={form.name || "Profile photo"}
+          <DashboardCard className="p-4 text-center sm:p-5">
+            <div className="relative mx-auto flex size-24 items-center justify-center">
+              <svg
+                className="absolute inset-0 size-full -rotate-90 text-muted"
+                viewBox="0 0 64 64"
+                aria-hidden="true"
+              >
+                <circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" strokeWidth="4" />
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="27"
+                  fill="none"
+                  stroke="var(--primary)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray={completionCircumference}
+                  strokeDashoffset={completionCircumference * (1 - completion / 100)}
+                  className="transition-[stroke-dashoffset] duration-500"
                 />
-              ) : null}
-              <AvatarFallback className="text-lg font-bold">
-                {initialsOf(form.name)}
-              </AvatarFallback>
-            </Avatar>
+              </svg>
+              <Avatar className="size-20">
+                {form.image ? (
+                  <AvatarImage
+                    src={form.image}
+                    alt={form.name || "Profile photo"}
+                  />
+                ) : null}
+                <AvatarFallback className="text-lg font-bold">
+                  {initialsOf(form.name)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+
+            <p className="mt-2 text-sm font-semibold text-foreground" aria-live="polite">
+              Profile {completion}% complete
+            </p>
 
             <p className="mt-4 font-bold text-foreground">
               {form.name || "Unnamed account"}
@@ -281,7 +318,7 @@ export default function ProfileForm({ initial }: Props) {
               {form.email}
             </p>
 
-            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
               <ShieldCheck size={13} aria-hidden="true" />
               {form.role} account
             </span>
@@ -394,7 +431,7 @@ export default function ProfileForm({ initial }: Props) {
               </div>
             </div>
 
-            <div className="mt-6 flex items-center gap-3 border-t border-border pt-5">
+            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-5">
               <Button
                 type="submit"
                 disabled={saving || !dirty}

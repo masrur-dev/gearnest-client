@@ -125,7 +125,7 @@ export default function FavoritesList() {
     return (
       <div
         role="alert"
-        className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700"
+        className="rounded-2xl border border-destructive/25 bg-destructive/10 p-6 text-sm text-destructive"
       >
         <p className="font-semibold">Unable to load favorites</p>
         <p className="mt-1">{error}</p>
@@ -174,7 +174,7 @@ export default function FavoritesList() {
         {favorites.length === 1 ? "" : "s"}
       </p>
 
-      <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid min-w-0 gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
         {favorites.map((favorite) => {
           const equipment = favorite.equipment;
           const busy = busyId === favorite.equipmentId;
@@ -210,15 +210,15 @@ export default function FavoritesList() {
           return (
             <li
               key={favorite.id}
-              className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+              className="flex min-w-0 flex-col rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5"
             >
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
+                <div className="min-w-0">
+                  <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
                     {equipment.category}
                   </span>
 
-                  <h3 className="mt-3 font-bold text-foreground">
+                  <h3 className="mt-3 break-words font-bold text-foreground">
                     {equipment.name}
                   </h3>
                 </div>
@@ -241,7 +241,7 @@ export default function FavoritesList() {
                 </Button>
               </div>
 
-              <p className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
+              <p className="mt-3 flex min-w-0 items-center gap-1.5 break-words text-sm text-muted-foreground">
                 <MapPin size={14} />
                 {equipment.location}
               </p>
@@ -255,12 +255,12 @@ export default function FavoritesList() {
 
               <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
                 {available ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-success px-3 py-1 text-xs font-semibold text-success-foreground">
                     <Package size={13} />
                     {equipment.availableQuantity} available
                   </span>
                 ) : (
-                  <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                  <span className="rounded-full bg-destructive/15 px-3 py-1 text-xs font-semibold text-destructive">
                     Unavailable
                   </span>
                 )}

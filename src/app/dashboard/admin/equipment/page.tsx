@@ -246,7 +246,7 @@ export default function AdminEquipmentPage() {
       ) : error ? (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-700"
+          className="rounded-2xl border border-destructive/25 bg-destructive/10 p-6 text-destructive"
         >
           {error}
         </div>

@@ -142,8 +142,8 @@ export default function DashboardOverview({
 
   return (
     <div className="space-y-6">
-      <div className="theme-deep-panel rounded-2xl p-6 shadow-sm md:p-8">
-        <p className="text-sm font-semibold text-muted-foreground">
+      <div className="theme-deep-panel rounded-2xl p-5 shadow-sm sm:p-6 md:p-8">
+        <p className="text-sm font-semibold text-white/85">
           {user.role} Dashboard
         </p>
 
@@ -151,13 +151,13 @@ export default function DashboardOverview({
           Welcome back, {user.name.split(" ")[0]}!
         </h1>
 
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/90">
           Manage your GearNest account from here. Every section
           below only shows data your role is allowed to access.
         </p>
 
         <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
-          <span className="rounded-full bg-white/10 px-3 py-1 font-medium">
+          <span className="max-w-full break-all rounded-full bg-white/15 px-3 py-1 font-medium text-white">
             {user.email}
           </span>
           <span className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">
@@ -176,7 +176,7 @@ export default function DashboardOverview({
                 backend.status === "verified"
                   ? "bg-muted text-foreground"
                   : backend.status === "error"
-                    ? "bg-red-100 text-red-700"
+                    ? "bg-destructive/15 text-destructive"
                     : "bg-muted text-muted-foreground"
               }`}
             >

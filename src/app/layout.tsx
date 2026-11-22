@@ -4,7 +4,7 @@ import { Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import RouteFooter from "@/components/layout/RouteFooter";
 import { Toaster } from "sonner";
 
 const heading = Poppins({
@@ -39,7 +39,9 @@ export default function RootLayout({
 
         <div className="flex-1">{children}</div>
 
-        <Footer />
+        <Suspense fallback={null}>
+          <RouteFooter />
+        </Suspense>
         <Toaster richColors position="top-right" />
       </body>
     </html>

@@ -72,15 +72,15 @@ export default function DashboardMetrics({ role }: { role: UserRole }) {
   }, [role]);
 
   return (
-    <section aria-label="Dashboard summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <section aria-label="Dashboard summary" className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
       {(metrics ?? [
         { label: "Loading summary", value: "…", icon: Activity },
         { label: "Loading summary", value: "…", icon: Package },
         { label: "Loading summary", value: "…", icon: CreditCard },
       ]).map((metric, index) => (
-        <article key={`${metric.label}-${index}`} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <article key={`${metric.label}-${index}`} className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <div className="flex items-center justify-between"><p className="text-sm font-medium text-muted-foreground">{metric.label}</p><span className="rounded-xl bg-muted p-2.5 text-foreground"><metric.icon size={18}/></span></div>
-          <p className="mt-4 text-3xl font-bold tracking-tight text-foreground">{metric.value}</p>
+          <p className="mt-4 break-words text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{metric.value}</p>
           {metric.note && <p className="mt-1 text-xs text-muted-foreground">{metric.note}</p>}
         </article>
       ))}

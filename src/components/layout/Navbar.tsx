@@ -173,7 +173,7 @@ function ProfileDropdown({
             variant="outline"
             size="sm"
             interaction="compact"
-            className="group h-11 rounded-full border border-border/70 bg-card/80 px-1.5 pr-3 text-foreground shadow-[0_6px_20px_-10px_var(--theme-shadow)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-border hover:bg-muted/60 hover:shadow-[0_12px_26px_-10px_var(--theme-shadow)] motion-reduce:transform-none motion-reduce:transition-none dark:border-border dark:bg-card/80 dark:text-white dark:hover:border-primary dark:hover:bg-muted/70"
+            className="group h-11 rounded-full border border-border/70 bg-card/80 px-1.5 pr-3 text-foreground shadow-[0_6px_20px_-10px_var(--theme-shadow)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-border hover:bg-muted/60 hover:shadow-[0_12px_26px_-10px_var(--theme-shadow)] motion-reduce:transform-none motion-reduce:transition-none dark:border-border dark:bg-card/80 dark:text-foreground dark:hover:border-primary dark:hover:bg-muted/70"
           />
         }
       >
@@ -185,7 +185,7 @@ function ProfileDropdown({
             />
           )}
 
-          <AvatarFallback className="bg-gradient-to-br from-primary via-primary to-secondary font-bold text-white">
+          <AvatarFallback className="bg-primary font-bold text-primary-foreground">
             {initials || "U"}
           </AvatarFallback>
         </Avatar>
@@ -213,7 +213,7 @@ function ProfileDropdown({
         {/* Profile information */}
         <DropdownMenuGroup>
           <DropdownMenuLabel>
-            <div className="mb-1 flex items-center gap-3 rounded-xl border border-border/80 bg-gradient-to-br from-slate-50/80 via-card to-slate-50/60 px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:border-border dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
+            <div className="mb-1 flex items-center gap-3 rounded-xl border border-border/80 bg-muted px-3 py-3 dark:border-border">
               <div className="relative shrink-0">
                 <Avatar className="size-11 ring-2 ring-primary/40 shadow-[0_8px_16px_-8px_var(--theme-shadow)] transition-transform duration-300 hover:scale-105 motion-reduce:transition-none dark:ring-ring/60">
                   {user.image && (
@@ -222,7 +222,7 @@ function ProfileDropdown({
                       alt={user.name}
                     />
                   )}
-                  <AvatarFallback className="bg-gradient-to-br from-primary via-primary to-secondary font-bold text-white">
+                  <AvatarFallback className="bg-primary font-bold text-primary-foreground">
                     {initials || "U"}
                   </AvatarFallback>
                 </Avatar>
@@ -313,12 +313,38 @@ function ProfileDropdown({
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currentHash, setCurrentHash] = useState("");
   const pathname = usePathname();
 
   const { data: session, isPending } =
     authClient.useSession();
 
   const user = session?.user;
+
+  function isLinkActive(href: string) {
+    const [path, hash] = href.split("#");
+    const targetPath = path || "/";
+
+    return pathname === targetPath && currentHash === (hash ? `#${hash}` : "");
+  }
+
+  function handleNavigationClick(href: string) {
+    const hashIndex = href.indexOf("#");
+    setCurrentHash(hashIndex >= 0 ? href.slice(hashIndex) : "");
+    setOpen(false);
+  }
+
+  useEffect(() => {
+    const syncHash = () => setCurrentHash(window.location.hash);
+
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+    window.addEventListener("popstate", syncHash);
+    return () => {
+      window.removeEventListener("hashchange", syncHash);
+      window.removeEventListener("popstate", syncHash);
+    };
+  }, [pathname]);
 
   // Track scroll to switch between transparent and glass styles
   useEffect(() => {
@@ -350,16 +376,16 @@ export default function Navbar() {
             className="group flex items-center gap-2.5"
             onClick={() => setOpen(false)}
           >
-            <span className="relative rounded-xl bg-gradient-to-br from-primary via-primary to-secondary p-2 text-white shadow-[0_8px_18px_-8px_var(--theme-shadow)] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
+            <span className="relative rounded-xl bg-primary p-2 text-primary-foreground shadow-[0_8px_18px_-8px_var(--theme-shadow)] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
               <span className="absolute inset-0 rounded-xl bg-card/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <Wrench size={21} className="relative" />
             </span>
 
             <span className="text-xl font-extrabold tracking-tight">
-              <span className="bg-gradient-to-r from-primary via-primary to-secondary bg-clip-text text-transparent dark:from-slate-400 dark:via-slate-400 dark:to-slate-300">
+              <span className="text-primary">
                 Gear
               </span>
-              <span className="text-foreground dark:text-white">
+              <span className="text-foreground dark:text-foreground">
                 Nest
               </span>
             </span>
@@ -371,9 +397,11 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => handleNavigationClick(link.href)}
+                aria-current={isLinkActive(link.href) ? "page" : undefined}
                 className={`relative whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 motion-reduce:transition-none ${
-                  pathname === link.href
-                    ? "bg-gradient-to-r from-primary via-primary to-secondary text-white shadow-[0_6px_16px_-6px_var(--theme-shadow)]"
+                  isLinkActive(link.href)
+                    ? "bg-primary text-primary-foreground shadow-[0_6px_16px_-6px_var(--theme-shadow)]"
                     : navColors.link
                 }`}
               >
@@ -404,7 +432,7 @@ export default function Navbar() {
                 <ButtonLink
                   href="/register"
                   size="sm"
-                  className="whitespace-nowrap rounded-full border-0 bg-gradient-to-r from-primary via-primary to-secondary px-5 py-2 text-white shadow-[0_8px_18px_-8px_var(--theme-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-8px_var(--theme-shadow)] motion-reduce:transform-none motion-reduce:transition-none"
+                  className="whitespace-nowrap rounded-full border-0 bg-primary px-5 py-2 text-primary-foreground shadow-[0_8px_18px_-8px_var(--theme-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-8px_var(--theme-shadow)] motion-reduce:transform-none motion-reduce:transition-none"
                 >
                   Sign Up
                 </ButtonLink>
@@ -448,10 +476,11 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setOpen(false)}
+                onClick={() => handleNavigationClick(link.href)}
+                aria-current={isLinkActive(link.href) ? "page" : undefined}
                 className={`block rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-300 motion-reduce:transition-none ${
-                  pathname === link.href
-                    ? "bg-gradient-to-r from-primary via-primary to-secondary text-white shadow-[0_6px_16px_-6px_var(--theme-shadow)]"
+                  isLinkActive(link.href)
+                    ? "bg-primary text-primary-foreground shadow-[0_6px_16px_-6px_var(--theme-shadow)]"
                     : navColors.mobileLink
                 }`}
               >
@@ -492,7 +521,7 @@ export default function Navbar() {
                 <ButtonLink
                   href="/register"
                   onClick={() => setOpen(false)}
-                  className="w-full rounded-xl bg-gradient-to-r from-primary via-primary to-secondary text-white"
+                  className="w-full rounded-xl bg-primary text-primary-foreground"
                 >
                   Sign Up
                 </ButtonLink>

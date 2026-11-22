@@ -329,12 +329,12 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
             ) : error ? (
               <div
                 role="alert"
-                className="rounded-2xl border border-red-200 bg-red-50 p-10 text-center"
+                className="rounded-2xl border border-destructive/25 bg-destructive/10 p-10 text-center"
               >
-                <h3 className="text-xl font-bold text-red-700">
+                <h3 className="text-xl font-bold text-destructive">
                   Unable to Load Equipment
                 </h3>
-                <p className="mt-3 text-sm text-red-600">{error}</p>
+                <p className="mt-3 text-sm text-destructive">{error}</p>
                 <p className="mt-3 text-sm text-muted-foreground">
                   Check that your Express server is running.
                 </p>
@@ -362,7 +362,7 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
                     key={item._id}
                     className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:shadow-lg"
                   >
-                    <div className="relative flex h-48 items-center justify-center bg-linear-to-br from-slate-100 to-slate-200">
+                    <div className="relative flex h-48 items-center justify-center bg-linear-to-br from-muted to-card">
                       <FavoriteButton
                         equipmentId={item._id}
                         equipmentName={item.name}
@@ -403,11 +403,11 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
 
                       <div className="mt-4">
                         {item.availableQuantity > 0 ? (
-                          <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
+                          <span className="rounded-full bg-success px-3 py-1 text-xs font-semibold text-success-foreground">
                             Available
                           </span>
                         ) : (
-                          <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                          <span className="rounded-full bg-destructive/15 px-3 py-1 text-xs font-semibold text-destructive">
                             Unavailable
                           </span>
                         )}

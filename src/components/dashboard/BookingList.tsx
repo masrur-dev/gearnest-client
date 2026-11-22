@@ -261,7 +261,7 @@ export default function BookingList({
       ) : error ? (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700"
+          className="rounded-2xl border border-destructive/25 bg-destructive/10 p-6 text-sm text-destructive"
         >
           <p className="font-semibold">Unable to load bookings</p>
           <p className="mt-1">{error}</p>

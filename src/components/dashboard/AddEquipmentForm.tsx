@@ -82,7 +82,7 @@ const EMPTY_FORM: FormValues = {
 };
 
 const controlClass =
-  "w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground outline-none transition focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground aria-invalid:border-red-500 aria-invalid:focus-visible:ring-red-500/20";
+  "w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground outline-none transition focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/20";
 
 function validate(values: FormValues): FieldErrors {
   const errors: FieldErrors = {};
@@ -182,7 +182,7 @@ function FieldError({
   return (
     <p
       id={`${id}-error`}
-      className="mt-1.5 text-xs font-medium text-red-600"
+      className="mt-1.5 text-xs font-medium text-destructive"
     >
       {message}
     </p>
@@ -439,7 +439,7 @@ export default function AddEquipmentForm({
       ) : loadError ? (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700"
+          className="rounded-2xl border border-destructive/25 bg-destructive/10 p-6 text-sm text-destructive"
         >
           <p className="font-semibold">Unable to load this listing</p>
           <p className="mt-1">{loadError}</p>

@@ -49,7 +49,7 @@ export default function DashboardTopbar({
         </p>
       </div>
 
-      <span className="hidden rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground sm:inline-block">
+      <span className="hidden rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground sm:inline-block">
         {role}
       </span>
 

@@ -255,7 +255,7 @@ export default function AdminUsersPage() {
             Loading users...
           </div>
         ) : error ? (
-          <div role="alert" className="rounded-xl bg-red-50 p-5 text-red-700">
+          <div role="alert" className="rounded-xl bg-destructive/10 p-5 text-destructive">
             {error}
           </div>
         ) : filteredUsers.length === 0 ? (
@@ -273,7 +273,7 @@ export default function AdminUsersPage() {
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {filteredUsers.map((user) => (
                   <tr key={user.id}>
                     <td className="p-4">

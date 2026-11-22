@@ -116,7 +116,7 @@ export default function RoleManagement() {
           Loading users...
         </div>
       ) : error ? (
-        <p role="alert" className="mt-5 text-red-600">
+        <p role="alert" className="mt-5 text-destructive">
           {error}
         </p>
       ) : (

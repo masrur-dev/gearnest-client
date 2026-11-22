@@ -26,7 +26,7 @@ export function DashboardPageHeader({
         </h1>
 
         {description && (
-          <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             {description}
           </p>
         )}
@@ -76,7 +76,7 @@ export function InfoBanner({
     info: "border-border bg-muted text-foreground",
     success: "border-border bg-muted text-foreground",
     warning: "border-border bg-muted text-foreground",
-    error: "border-red-200 bg-red-50 text-red-800",
+    error: "border-destructive/25 bg-destructive/10 text-destructive",
   };
 
   const Icon =

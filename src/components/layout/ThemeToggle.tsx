@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
-import { Moon, Leaf } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 
 type Theme = "soft" | "dark";
 
@@ -84,10 +84,10 @@ export default function ThemeToggle() {
       role="switch"
       aria-checked={isDark}
       aria-label="Dark theme"
-      title={isDark ? "Switch to Nature Mist" : "Switch to Midnight"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className="relative inline-flex h-9 w-[72px] shrink-0 items-center rounded-full border border-border bg-secondary transition-all duration-300 hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <Leaf
+      <Sun
         size={15}
         aria-hidden="true"
         className="absolute left-3 text-secondary-foreground"
@@ -105,7 +105,7 @@ export default function ThemeToggle() {
           isDark ? "translate-x-9" : "translate-x-0"
         }`}
       >
-        {isDark ? <Moon size={15} /> : <Leaf size={15} />}
+        {isDark ? <Moon size={15} /> : <Sun size={15} />}
       </span>
     </button>
   );

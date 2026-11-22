@@ -58,121 +58,133 @@
 }
 
 /* =========================================
-   SOFT THEME — NATURE MIST
+   LIGHT THEME — OLIVE AND STONE
 ========================================= */
 
 :root {
   color-scheme: light;
 
-  --background: #fffbeb;
-  --foreground: #064e3b;
+  --background: #ffffff;
+  --foreground: #171914;
 
-  --card: #ecfdf5;
-  --card-foreground: #064e3b;
+  --card: #ffffff;
+  --card-foreground: #171914;
 
-  --popover: #fffbeb;
-  --popover-foreground: #064e3b;
+  --popover: #ffffff;
+  --popover-foreground: #171914;
 
-  --primary: #047857;
+  --primary: #55751e;
   --primary-foreground: #ffffff;
 
-  --secondary: #a7f3d0;
-  --secondary-foreground: #064e3b;
+  --secondary: #4b6722;
+  --secondary-foreground: #ffffff;
 
-  --muted: #ecfdf5;
-  --muted-foreground: #3f6655;
+  --muted: #f0f2eb;
+  --muted-foreground: #62685a;
 
-  --accent: #a7f3d0;
-  --accent-foreground: #064e3b;
+  --accent: #e2edcc;
+  --accent-foreground: #344b16;
 
-  --success: #047857;
+  --success: #059669;
   --success-foreground: #ffffff;
 
-  --destructive: #b91c1c;
+  --destructive: #e11d48;
   --destructive-foreground: #ffffff;
 
-  --border: #c4dfce;
-  --input: #8caf9b;
-  --ring: #047857;
+  --border: #dfe5d3;
+  --input: #a2ad8e;
+  --ring: #55751e;
 
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  --aura-primary: #047857;
-  --aura-secondary: #a7f3d0;
+  --glow-primary: #55751e;
 
-  --theme-shadow: #064e3b20;
+  --theme-shadow: #425b1f24;
 
-  --sidebar: #ecfdf5;
-  --sidebar-foreground: #064e3b;
-  --sidebar-primary: #047857;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #171914;
+  --sidebar-primary: #55751e;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #a7f3d0;
-  --sidebar-accent-foreground: #064e3b;
-  --sidebar-border: #c4dfce;
-  --sidebar-ring: #047857;
+  --sidebar-accent: #f0f2eb;
+  --sidebar-accent-foreground: #171914;
+  --sidebar-border: #dfe5d3;
+  --sidebar-ring: #55751e;
 }
 
 /* =========================================
-   DARK THEME — MIDNIGHT
+   DARK THEME — BLACK AND CITRUS
 ========================================= */
 
 .dark {
   color-scheme: dark;
 
-  --background: #000000;
-  --foreground: #e1dcc9;
+  --background: #090a08;
+  --foreground: #f7f8f4;
 
-  --card: #1f150c;
-  --card-foreground: #e1dcc9;
+  --card: #121410;
+  --card-foreground: #f7f8f4;
 
-  --popover: #1f150c;
-  --popover-foreground: #e1dcc9;
+  --popover: #121410;
+  --popover-foreground: #f7f8f4;
 
-  --primary: #e1dcc9;
-  --primary-foreground: #000000;
+  --primary: #d5e86a;
+  --primary-foreground: #171a0b;
 
-  --secondary: #412d15;
-  --secondary-foreground: #e1dcc9;
+  --secondary: #20231a;
+  --secondary-foreground: #f1f3e9;
 
-  --muted: #1f150c;
-  --muted-foreground: #b5ad98;
+  --muted: #1c1e18;
+  --muted-foreground: #aeb1a3;
 
-  --accent: #412d15;
-  --accent-foreground: #e1dcc9;
+  --accent: #d5e86a;
+  --accent-foreground: #171a0b;
 
-  --success: #86efac;
-  --success-foreground: #052e16;
+  --success: #34d399;
+  --success-foreground: #04140d;
 
-  --destructive: #f87171;
-  --destructive-foreground: #1f150c;
+  --destructive: #fb7185;
+  --destructive-foreground: #1a0710;
 
-  --border: #412d15;
-  --input: #877356;
-  --ring: #e1dcc9;
+  --border: #2c3025;
+  --input: #555a49;
+  --ring: #d5e86a;
 
-  --aura-primary: #e1dcc9;
-  --aura-secondary: #412d15;
+  --glow-primary: #d5e86a;
 
-  --theme-shadow: #e1dcc91a;
+  --theme-shadow: #d5e86a1f;
 
-  --sidebar: #1f150c;
-  --sidebar-foreground: #e1dcc9;
-  --sidebar-primary: #e1dcc9;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #412d15;
-  --sidebar-accent-foreground: #e1dcc9;
-  --sidebar-border: #412d15;
-  --sidebar-ring: #e1dcc9;
+  --sidebar: #121410;
+  --sidebar-foreground: #f7f8f4;
+  --sidebar-primary: #d5e86a;
+  --sidebar-primary-foreground: #171a0b;
+  --sidebar-accent: #1c1e18;
+  --sidebar-accent-foreground: #f7f8f4;
+  --sidebar-border: #2c3025;
+  --sidebar-ring: #d5e86a;
 }
 
 .theme-deep-panel {
-  background-color: #064e3b;
+  background-color: #4b5d25;
+  background-image: none;
   color: #ffffff;
 }
 
+.theme-light-green-panel {
+  background-color: #4b5d25;
+  background-image: linear-gradient(105deg, #40551f 0%, #4d711c 56%, #587e13 100%);
+  color: #ffffff;
+}
+
+.dark .theme-light-green-panel {
+  background-color: #090a08;
+  background-image: none;
+  color: var(--foreground);
+}
+
 .dark .theme-deep-panel {
-  background-color: #000000;
-  color: #e1dcc9;
+  background-color: #090a08;
+  background-image: none;
+  color: #f7f8f4;
 }
 
 .dark .theme-deep-panel .text-white {
@@ -184,11 +196,11 @@
 }
 
 .dark .theme-deep-panel .text-muted-foreground {
-  color: rgb(225 220 201 / 72%);
+  color: rgb(247 248 244 / 72%);
 }
 
 .theme-deep-panel .text-primary {
-  color: #a7f3d0;
+  color: #e6f4a2;
 }
 
 .dark .theme-deep-panel .text-primary {
@@ -292,25 +304,39 @@ button:focus-visible {
 }
 
 /* =========================================
-   THEME-AWARE AURA
+   THEME-AWARE BLURRED GRADIENT GLOW
 ========================================= */
 
-.aura-dual {
-  box-shadow:
-    -8px 0 35px
-      color-mix(in srgb, var(--aura-primary) 25%, transparent),
-    8px 0 35px
-      color-mix(in srgb, var(--aura-secondary) 30%, transparent);
-
-  transition: box-shadow 350ms ease;
+.blur-gradient-frame {
+  position: relative;
+  isolation: isolate;
 }
 
-.aura-dual:hover {
-  box-shadow:
-    -12px 0 45px
-      color-mix(in srgb, var(--aura-primary) 35%, transparent),
-    12px 0 45px
-      color-mix(in srgb, var(--aura-secondary) 40%, transparent);
+.blur-gradient-frame::before {
+  position: absolute;
+  z-index: -1;
+  inset: -0.25rem;
+  border-radius: inherit;
+  background-image: linear-gradient(
+    125deg,
+    color-mix(in srgb, currentColor 35%, transparent),
+    color-mix(in srgb, currentColor 72%, transparent),
+    currentColor
+  );
+  content: "";
+  color: var(--glow-primary);
+  filter: blur(1.1rem);
+  opacity: 0.52;
+  pointer-events: none;
+  transition:
+    color 900ms ease,
+    filter 600ms ease,
+    opacity 600ms ease;
+}
+
+.blur-gradient-frame:hover::before {
+  filter: blur(1.4rem);
+  opacity: 0.78;
 }
 
 /* =========================================
@@ -344,7 +370,8 @@ button:focus-visible {
   [data-slot="button"],
   [data-slot="button"] [data-button-arrow],
   .equipment-card-hover,
-  .aura-dual {
+  .blur-gradient-frame,
+  .blur-gradient-frame::before {
     transition: none;
   }
 
@@ -364,6 +391,21 @@ button:focus-visible {
     @apply border-border outline-ring/50;
   }
 
+  a[href],
+  button,
+  [role="button"],
+  tr {
+    transition-property:
+      background-color,
+      color,
+      border-color,
+      box-shadow,
+      transform,
+      opacity;
+    transition-duration: 300ms;
+    transition-timing-function: ease-out;
+  }
+
   body {
     @apply bg-background text-foreground font-sans;
 
@@ -381,6 +423,15 @@ button:focus-visible {
 
   html {
     @apply font-sans;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a[href],
+  button,
+  [role="button"],
+  tr {
+    transition: none;
   }
 }
 

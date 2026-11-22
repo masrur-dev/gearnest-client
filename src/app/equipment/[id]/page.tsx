@@ -157,7 +157,7 @@ async function EquipmentDetails({
                   </span>
 
                   {canBook && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-success px-3 py-1 text-xs font-semibold text-success-foreground">
                       <CheckCircle2 size={14} />
                       Available
                     </span>

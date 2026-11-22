@@ -46,9 +46,9 @@ const STATUS_TABS = [
 ] as const;
 
 const statusBadge: Record<string, { label: string; className: string }> = {
-  pending: { label: "Pending", className: "bg-muted text-foreground" },
-  approved: { label: "Approved", className: "bg-muted text-foreground" },
-  rejected: { label: "Rejected", className: "bg-red-100 text-red-700" },
+  pending: { label: "Pending", className: "bg-accent text-accent-foreground" },
+  approved: { label: "Approved", className: "bg-success text-success-foreground" },
+  rejected: { label: "Rejected", className: "bg-destructive/15 text-destructive" },
   removed: { label: "Removed", className: "bg-muted text-muted-foreground" },
 };
 
@@ -215,7 +215,7 @@ export default function OwnerEquipmentPanel() {
       ) : error ? (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700"
+          className="rounded-2xl border border-destructive/25 bg-destructive/10 p-6 text-sm text-destructive"
         >
           <p className="font-semibold">Unable to load listings</p>
           <p className="mt-1">{error}</p>
@@ -263,7 +263,7 @@ export default function OwnerEquipmentPanel() {
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {visible.map((item) => {
                   const badge =
                     statusBadge[item.status] ?? statusBadge.removed;

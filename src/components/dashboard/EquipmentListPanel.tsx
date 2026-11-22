@@ -125,12 +125,12 @@ export default function EquipmentListPanel({
     return (
       <div
         role="alert"
-        className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center"
+        className="rounded-2xl border border-destructive/25 bg-destructive/10 p-8 text-center"
       >
-        <h2 className="font-bold text-red-700">
+        <h2 className="font-bold text-destructive">
           Unable to load equipment
         </h2>
-        <p className="mt-2 text-sm text-red-600">{error}</p>
+        <p className="mt-2 text-sm text-destructive">{error}</p>
         <p className="mt-2 text-sm text-muted-foreground">
           Check that the GearNest API server is running.
         </p>
@@ -188,7 +188,7 @@ export default function EquipmentListPanel({
                   <th className="px-4 py-3">Availability</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-border">
                 {visible.map((item) => (
                   <tr key={item._id} className="hover:bg-muted">
                     <td className="px-4 py-3">
@@ -221,11 +221,11 @@ export default function EquipmentListPanel({
                     </td>
                     <td className="px-4 py-3">
                       {item.availableQuantity > 0 ? (
-                        <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-foreground">
+                        <span className="rounded-full bg-success px-2.5 py-1 text-xs font-semibold text-success-foreground">
                           {item.availableQuantity} available
                         </span>
                       ) : (
-                        <span className="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
+                        <span className="rounded-full bg-destructive/15 px-2.5 py-1 text-xs font-semibold text-destructive">
                           Unavailable
                         </span>
                       )}

@@ -85,7 +85,7 @@ export default function OwnerDashboardPage() {
       <div className="mx-auto max-w-xl rounded-2xl border bg-card p-10 text-center">
         <ShieldAlert
           size={44}
-          className="mx-auto mb-4 text-red-500"
+          className="mx-auto mb-4 text-destructive"
         />
 
         <h1 className="text-2xl font-bold">
