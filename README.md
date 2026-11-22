@@ -16,6 +16,20 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## API and authentication
+
+Set `NEXT_PUBLIC_API_URL` to the backend origin. In local development,
+authentication can use that URL directly (`http://localhost:5000`). In
+production, set `NEXT_PUBLIC_AUTH_URL` to the frontend origin so browser auth
+requests use the same-origin `/api/auth/*` proxy configured in `next.config.ts`.
+
+The backend's `BETTER_AUTH_URL` and `CLIENT_URL` must both be the frontend
+origin in production. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` on the
+backend to enable Google sign-in. Register
+`<frontend-origin>/api/auth/callback/google` as the Google OAuth callback URL
+and `<frontend-origin>/api/auth/callback/github` as the GitHub callback URL.
+Keep the callback URLs, frontend origin, and configured Better Auth URL aligned.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
