@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Heart, Loader2 } from "lucide-react";
+import { AlertCircle, Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { authFetch } from "@/lib/api";
@@ -28,6 +28,8 @@ export default function FavoriteButton({
   const router = useRouter();
   const [favorited, setFavorited] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
+  const [favoriteLoadError, setFavoriteLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -43,6 +45,10 @@ export default function FavoriteButton({
           return;
         }
 
+        if (!response.ok) {
+          throw new Error(`Unable to load favorites (${response.status}).`);
+        }
+
         const result = (await response.json()) as {
           success?: boolean;
           data?: FavoriteEntry[];
@@ -50,13 +56,27 @@ export default function FavoriteButton({
 
         if (!active) return;
 
-        setFavorited(
-          (result.data ?? []).some(
-            (entry) => entry.equipmentId === equipmentId
-          )
+        if (result.success !== true || !Array.isArray(result.data)) {
+          throw new Error("The favorites response was invalid.");
+        }
+
+        setFavorited(result.data.some((entry) => entry.equipmentId === equipmentId));
+      } catch (error) {
+        if (!active) return;
+
+        if (
+          error instanceof Error &&
+          error.message === "Authentication required"
+        ) {
+          setFavorited(false);
+          return;
+        }
+
+        setFavoriteLoadError(
+          error instanceof Error
+            ? error.message
+            : "Unable to load favorite status."
         );
-      } catch {
-        if (active) setFavorited(false);
       }
     }
 
@@ -65,7 +85,7 @@ export default function FavoriteButton({
     return () => {
       active = false;
     };
-  }, [equipmentId]);
+  }, [equipmentId, retryCount]);
 
   async function toggle() {
     if (busy) return;
@@ -128,6 +148,28 @@ export default function FavoriteButton({
   }
 
   if (favorited === null) {
+    if (favoriteLoadError) {
+      return (
+        <Button
+          type="button"
+          onClick={() => {
+            setFavoriteLoadError("");
+            setFavorited(null);
+            setRetryCount((count) => count + 1);
+          }}
+          aria-label="Retry loading favorite status"
+          title={favoriteLoadError}
+          variant="outline"
+          size={iconOnly ? "icon-sm" : "sm"}
+          interaction="compact"
+          className={className}
+        >
+          <AlertCircle size={16} aria-hidden="true" />
+          {!iconOnly && "Retry"}
+        </Button>
+      );
+    }
+
     return (
       <span
         aria-hidden="true"
