@@ -1,50 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GearNest Client
 
-## Getting Started
+GearNest is a Next.js client for an equipment-rental marketplace. Customers can
+find and book equipment, owners can manage listings, and admins can review
+marketplace activity. Authentication and rental data are provided by the
+GearNest API.
 
-First, run the development server:
+## Requirements
+
+- Node.js 20.9 or newer
+- npm
+- A running GearNest API for authentication and marketplace data
+
+## Local development
+
+Install dependencies and start the development server:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The client defaults to an
+API at `http://localhost:5000`; override it in `.env.local` when your API runs
+elsewhere:
 
-## API and authentication
+```dotenv
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
 
-Set `NEXT_PUBLIC_API_URL` to the backend origin. In local development,
-authentication can use that URL directly (`http://localhost:5000`). In
-production, set `NEXT_PUBLIC_AUTH_URL` to the frontend origin so browser auth
-requests use the same-origin `/api/auth/*` proxy configured in `next.config.ts`.
+`NEXT_PUBLIC_SUPPORT_EMAIL` is an optional public contact address used on the
+Contact page. Values prefixed with `NEXT_PUBLIC_` are included in browser code;
+do not put credentials or other secrets in them.
 
-The backend's `BETTER_AUTH_URL` and `CLIENT_URL` must both be the frontend
-origin in production. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` on the
-backend to enable Google sign-in. Register
-`<frontend-origin>/api/auth/callback/google` as the Google OAuth callback URL
-and `<frontend-origin>/api/auth/callback/github` as the GitHub callback URL.
-Keep the callback URLs, frontend origin, and configured Better Auth URL aligned.
+## Authentication and deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The client uses Better Auth for email/password, Google, and GitHub sign-in.
+Google and GitHub provider credentials belong on the backend, not in this
+repository.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In production, set `NEXT_PUBLIC_API_URL` to the backend origin and
+`NEXT_PUBLIC_AUTH_URL` to the frontend origin. The frontend routes
+`/api/auth/*` to the backend, keeping browser authentication requests
+same-origin. Configure the backend's `BETTER_AUTH_URL` and `CLIENT_URL` to the
+frontend origin, and register these provider callback URLs:
 
-## Learn More
+```text
+<frontend-origin>/api/auth/callback/google
+<frontend-origin>/api/auth/callback/github
+```
 
-To learn more about Next.js, take a look at the following resources:
+Keep the frontend origin, backend Better Auth URL, and provider callback URLs
+aligned. The API remains responsible for authorization; dashboard pages use
+the authenticated user's role to show the appropriate customer, owner, or
+admin experience.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev       # Start the development server
+npm run lint      # Run ESLint
+npx tsc --noEmit  # Check TypeScript types
+npm run build     # Create a production build
+npm run start     # Serve the production build
+```
 
-## Deploy on Vercel
+## Main routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/equipment` — search and filter equipment listings
+- `/equipment/[id]` — listing details and booking
+- `/login` and `/register` — account access
+- `/dashboard` — role-specific account and marketplace management
+- `/payment/success` and `/payment/cancel` — Stripe Checkout return pages
