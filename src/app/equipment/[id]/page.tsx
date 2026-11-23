@@ -1,5 +1,6 @@
 
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -34,6 +35,35 @@ type Equipment = {
 type PageProps = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const equipment = await getEquipment(id);
+
+  if (!equipment) {
+    return {
+      title: "Equipment Not Found | GearNest",
+      description: "This GearNest equipment listing is unavailable.",
+    };
+  }
+
+  const description =
+    equipment.description?.replace(/\s+/g, " ").trim() ||
+    `View rental details for ${equipment.name} on GearNest.`;
+  const title = `${equipment.name} | GearNest Equipment Rental`;
+
+  return {
+    title,
+    description: description.slice(0, 160),
+    openGraph: {
+      title,
+      description: description.slice(0, 160),
+      ...(equipment.image ? { images: [equipment.image] } : {}),
+    },
+  };
+}
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
