@@ -59,8 +59,16 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const invalidPriceRange =
+    minPrice !== "" &&
+    maxPrice !== "" &&
+    Number(minPrice) > Number(maxPrice);
 
   useEffect(() => {
+    if (invalidPriceRange) {
+      return;
+    }
+
     const controller = new AbortController();
 
     const timer = setTimeout(async () => {
@@ -129,7 +137,16 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
       clearTimeout(timer);
       controller.abort();
     };
-  }, [search, category, rentalType, availability, sort, minPrice, maxPrice]);
+  }, [
+    search,
+    category,
+    rentalType,
+    availability,
+    sort,
+    minPrice,
+    maxPrice,
+    invalidPriceRange,
+  ]);
 
   function resetFilters() {
     setSearch("");
@@ -272,23 +289,42 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
                   <input
                     type="number"
                     min="0"
+                    step="0.01"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
                     placeholder="Min"
                     aria-label="Minimum price"
+                    aria-invalid={invalidPriceRange}
+                    aria-describedby={
+                      invalidPriceRange ? "price-range-error" : undefined
+                    }
                     className={inputClass}
                   />
 
                   <input
                     type="number"
                     min="0"
+                    step="0.01"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
                     placeholder="Max"
                     aria-label="Maximum price"
+                    aria-invalid={invalidPriceRange}
+                    aria-describedby={
+                      invalidPriceRange ? "price-range-error" : undefined
+                    }
                     className={inputClass}
                   />
                 </div>
+                {invalidPriceRange && (
+                  <p
+                    id="price-range-error"
+                    role="alert"
+                    className="mt-2 text-sm text-destructive"
+                  >
+                    Minimum price cannot exceed maximum price.
+                  </p>
+                )}
               </div>
             </div>
           </aside>
@@ -318,7 +354,14 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
               </select>
             </div>
 
-            {loading ? (
+            {invalidPriceRange ? (
+              <div
+                role="status"
+                className="rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground"
+              >
+                Adjust the price range to view matching equipment.
+              </div>
+            ) : loading ? (
               <div
                 role="status"
                 className="flex min-h-64 items-center justify-center gap-3"
