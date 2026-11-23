@@ -412,22 +412,12 @@ export default function EquipmentBrowser({ initialCategory = "" }: { initialCate
                         iconOnly
                         className="absolute right-3 top-3 z-10 rounded-full border-border/10 bg-card text-foreground shadow-sm hover:bg-muted"
                       />
-                      {item.image?.startsWith("https://") ||
-                      item.image?.startsWith("http://") ||
- item.image?.startsWith("/images/equipment/") ? (
-                        <EquipmentImage
-                          src={item.image}
-                          alt={item.name}
-                          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          className="object-contain p-5"
-                        />
-                      ) : (
-                        <Package
-                          size={68}
-                          strokeWidth={1.2}
-                          className="text-muted-foreground"
-                        />
-                      )}
+                      <EquipmentImage
+                        src={item.image}
+                        alt={item.name}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-contain p-5"
+                      />
                     </div>
 
                     <div className="flex flex-1 flex-col p-5">

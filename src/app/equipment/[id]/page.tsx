@@ -131,21 +131,12 @@ async function EquipmentDetails({
           <div className="space-y-7 lg:col-span-2">
             <div className="overflow-hidden rounded-2xl border border-border/10 bg-card shadow-sm">
               <div className="relative flex aspect-video items-center justify-center bg-accent/35">
-                {equipment.image?.startsWith("https://") ||
-                equipment.image?.startsWith("http://") ||
- equipment.image?.startsWith("/images/equipment/") ? (
-                  <EquipmentImage
-                    src={equipment.image}
-                    alt={equipment.name}
-                    sizes="(max-width: 1024px) 100vw, 66vw"
-                    className="object-contain p-6"
-                  />
-                ) : (
-                  <Package
-                    size={72}
-                    className="text-muted-foreground"
-                  />
-                )}
+                <EquipmentImage
+                  src={equipment.image}
+                  alt={equipment.name}
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  className="object-contain p-6"
+                />
               </div>
             </div>
 
