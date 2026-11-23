@@ -321,6 +321,19 @@ export default function Navbar() {
 
   const user = session?.user;
 
+  useEffect(() => {
+    if (!open) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
   function isLinkActive(href: string) {
     const [path, hash] = href.split("#");
     const targetPath = path || "/";
@@ -452,9 +465,9 @@ export default function Navbar() {
 
             <Button
               type="button"
-              aria-label="Toggle navigation"
+              aria-label={open ? "Close navigation" : "Open navigation"}
               aria-expanded={open}
-              aria-controls="mobile-navigation"
+              aria-controls={open ? "mobile-navigation" : undefined}
               onClick={() => setOpen(!open)}
               variant="ghost"
               size="icon-sm"
