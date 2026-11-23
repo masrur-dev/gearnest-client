@@ -24,6 +24,25 @@ export default function RegisterPage() {
     password: "",
   });
 
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof typeof form, string>>
+  >({});
+  const [formError, setFormError] = useState("");
+
+  function updateField(
+    field: keyof typeof form,
+    value: string
+  ) {
+    setForm((previous) => ({ ...previous, [field]: value }));
+    setErrors((previous) => {
+      if (!previous[field]) return previous;
+      const next = { ...previous };
+      delete next[field];
+      return next;
+    });
+    setFormError("");
+  }
+
   async function handleSubmit(
     e: FormEvent<HTMLFormElement>
   ) {
@@ -34,10 +53,14 @@ export default function RegisterPage() {
     const name = form.name.trim();
     const email = form.email.trim().toLowerCase();
     const image = form.image.trim();
+    const nextErrors: typeof errors = {};
 
-    if (!name || !email) {
-      toast.error("Name and email are required.");
-      return;
+    if (!name) {
+      nextErrors.name = "Enter your name.";
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      nextErrors.email = "Enter a valid email address.";
     }
 
     const validPassword =
@@ -46,10 +69,8 @@ export default function RegisterPage() {
       /[a-z]/.test(form.password);
 
     if (!validPassword) {
-      toast.error(
-        "Password must contain at least 6 characters, uppercase and lowercase letters."
-      );
-      return;
+      nextErrors.password =
+        "Use at least 6 characters, including uppercase and lowercase letters.";
     }
 
     if (image) {
@@ -62,9 +83,21 @@ export default function RegisterPage() {
           throw new Error("Invalid image URL");
         }
       } catch {
-        toast.error("Please enter a valid profile photo URL.");
-        return;
+        nextErrors.image =
+          "Enter a valid profile photo URL starting with http:// or https://.";
       }
+    }
+
+    setErrors(nextErrors);
+    setFormError("");
+
+    const firstInvalid = (
+      ["name", "email", "password", "image"] as const
+    ).find((field) => nextErrors[field]);
+
+    if (firstInvalid) {
+      document.getElementById(firstInvalid)?.focus();
+      return;
     }
 
     setLoading(true);
@@ -78,9 +111,9 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        toast.error(
-          error.message || "Registration failed."
-        );
+        const message = error.message || "Registration failed.";
+        setFormError(message);
+        toast.error(message);
         return;
       }
 
@@ -89,8 +122,10 @@ export default function RegisterPage() {
       router.replace("/dashboard");
       router.refresh();
     } catch {
+      const message = "Unable to connect to authentication server.";
+      setFormError(message);
       toast.error(
-        "Unable to connect to authentication server."
+        message
       );
     } finally {
       setLoading(false);
@@ -137,6 +172,7 @@ export default function RegisterPage() {
 
           <form
             onSubmit={handleSubmit}
+            noValidate
             className="mt-8 space-y-5"
           >
             {/* Full Name */}
@@ -153,19 +189,20 @@ export default function RegisterPage() {
                 name="name"
                 type="text"
                 autoComplete="name"
-                required
                 maxLength={200}
                 disabled={loading}
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? "name-error" : undefined}
                 className={inputStyle}
                 value={form.name}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
-                }
+                onChange={(e) => updateField("name", e.target.value)}
                 placeholder="Your full name"
               />
+              {errors.name && (
+                <p id="name-error" className="mt-2 text-sm text-destructive">
+                  {errors.name}
+                </p>
+              )}
             </div>
 
             {/* Email Address */}
@@ -182,18 +219,19 @@ export default function RegisterPage() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                required
                 disabled={loading}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 className={inputStyle}
                 value={form.email}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    email: e.target.value,
-                  }))
-                }
+                onChange={(e) => updateField("email", e.target.value)}
                 placeholder="you@example.com"
               />
+              {errors.email && (
+                <p id="email-error" className="mt-2 text-sm text-destructive">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             {/* Profile Photo */}
@@ -211,16 +249,18 @@ export default function RegisterPage() {
                 type="url"
                 autoComplete="off"
                 disabled={loading}
+                aria-invalid={Boolean(errors.image)}
+                aria-describedby={errors.image ? "image-error" : undefined}
                 className={inputStyle}
                 value={form.image}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    image: e.target.value,
-                  }))
-                }
+                onChange={(e) => updateField("image", e.target.value)}
                 placeholder="https://example.com/photo.jpg"
               />
+              {errors.image && (
+                <p id="image-error" className="mt-2 text-sm text-destructive">
+                  {errors.image}
+                </p>
+              )}
             </div>
 
             {/* Password */}
@@ -237,25 +277,36 @@ export default function RegisterPage() {
                 name="new-password"
                 type="password"
                 autoComplete="new-password"
-                required
-                minLength={6}
                 disabled={loading}
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={
+                  errors.password ? "password-error" : "password-help"
+                }
                 className={inputStyle}
                 value={form.password}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    password: e.target.value,
-                  }))
-                }
+                onChange={(e) => updateField("password", e.target.value)}
                 placeholder="Create a password"
               />
 
-              <p className="mt-2 text-xs text-muted-foreground">
+              <p id="password-help" className="mt-2 text-xs text-muted-foreground">
                 Minimum 6 characters, uppercase and lowercase
                 letters.
               </p>
+              {errors.password && (
+                <p id="password-error" className="mt-2 text-sm text-destructive">
+                  {errors.password}
+                </p>
+              )}
             </div>
+
+            {formError && (
+              <p
+                role="alert"
+                className="rounded-lg border border-destructive/25 bg-destructive/10 p-3 text-sm text-destructive"
+              >
+                {formError}
+              </p>
+            )}
 
             {/* Submit */}
             <Button
