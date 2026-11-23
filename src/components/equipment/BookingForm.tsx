@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 import { authFetch } from "@/lib/api";
+import { startCheckout } from "@/lib/payments";
 import { Button } from "@/components/ui/button";
 
 type BookingFormProps = {
@@ -95,34 +96,6 @@ export default function BookingForm({
 
     setPendingBookings(pending);
     return pending;
-  }
-
-  async function startCheckout(bookingId: string) {
-    const result = await request(
-      "/api/payments/create-checkout-session",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ bookingId }),
-      }
-    );
-
-    if (typeof result.url !== "string") {
-      throw new Error("Stripe Checkout URL is missing.");
-    }
-
-    const url = new URL(result.url);
-
-    if (
-      url.protocol !== "https:" ||
-      url.hostname !== "checkout.stripe.com"
-    ) {
-      throw new Error("Invalid Stripe Checkout URL.");
-    }
-
-    window.location.assign(url.href);
   }
 
   async function handleSubmit(
