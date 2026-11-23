@@ -92,32 +92,44 @@ export default function FavoriteButton({
 
     if (favorited === null) return;
 
-    // Anonymous visitors are sent to the login page first.
-    if (!favorited) {
-      try {
-        const probe = await authFetch("/api/dashboard/me");
-
-        if (probe.status === 401) {
-          router.push(
-            `/login?callbackUrl=${encodeURIComponent(
-              `/equipment/${equipmentId}`
-            )}`
-          );
-          return;
-        }
-      } catch {
-        router.push(
-          `/login?callbackUrl=${encodeURIComponent(
-            `/equipment/${equipmentId}`
-          )}`
-        );
-        return;
-      }
-    }
-
     setBusy(true);
 
     try {
+      if (!favorited) {
+        try {
+          const probe = await authFetch("/api/dashboard/me");
+
+          if (probe.status === 401) {
+            router.push(
+              `/login?callbackUrl=${encodeURIComponent(
+                `/equipment/${equipmentId}`
+              )}`
+            );
+            return;
+          }
+
+          if (!probe.ok) {
+            throw new Error(
+              `Unable to verify your session (${probe.status}).`
+            );
+          }
+        } catch (error) {
+          if (
+            error instanceof Error &&
+            error.message === "Authentication required"
+          ) {
+            router.push(
+              `/login?callbackUrl=${encodeURIComponent(
+                `/equipment/${equipmentId}`
+              )}`
+            );
+            return;
+          }
+
+          throw error;
+        }
+      }
+
       const response = await authFetch(
         `/api/favorites/${equipmentId}`,
         { method: favorited ? "DELETE" : "POST" }
