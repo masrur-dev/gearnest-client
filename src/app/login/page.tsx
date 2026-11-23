@@ -64,7 +64,7 @@ function LoginForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (loading) return;
+    if (loading || socialLoading) return;
 
     setError("");
 
@@ -163,7 +163,7 @@ function LoginForm() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
-                  disabled={loading}
+                  disabled={loading || socialLoading !== null}
                   className="h-12 w-full rounded-xl border border-border bg-card pl-11 pr-4 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20 disabled:opacity-60"
                 />
               </div>
@@ -191,14 +191,14 @@ function LoginForm() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="Enter your password"
-                  disabled={loading}
+                  disabled={loading || socialLoading !== null}
                   className="h-12 w-full rounded-xl border border-border bg-card pl-11 pr-12 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20 disabled:opacity-60"
                 />
 
                 <Button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  disabled={loading}
+                  disabled={loading || socialLoading !== null}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   variant="ghost"
                   size="icon-sm"
@@ -219,7 +219,13 @@ function LoginForm() {
               </p>
             )}
 
-            <Button type="submit" loading={loading} size="lg" className="w-full">
+            <Button
+              type="submit"
+              loading={loading}
+              disabled={socialLoading !== null}
+              size="lg"
+              className="w-full"
+            >
               {loading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
