@@ -40,7 +40,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const equipment = await getEquipment(id);
+  const { equipment } = await getEquipment(id);
 
   if (!equipment) {
     return {
@@ -71,7 +71,7 @@ const API_URL =
 
 async function getEquipment(
   id: string
-): Promise<Equipment | null> {
+): Promise<{ equipment: Equipment | null; error: string | null }> {
   try {
     const response = await fetch(
       `${API_URL}/api/equipment/${encodeURIComponent(id)}`,
@@ -80,7 +80,13 @@ async function getEquipment(
       }
     );
 
-    if (!response.ok) return null;
+    if (response.status === 404) {
+      return { equipment: null, error: null };
+    }
+
+    if (!response.ok) {
+      throw new Error(`Marketplace request failed (${response.status}).`);
+    }
 
     const result = await response.json();
 
@@ -92,13 +98,19 @@ async function getEquipment(
       !equipment._id ||
       !equipment.name
     ) {
-      return null;
+      throw new Error("The marketplace returned an invalid listing.");
     }
 
-    return equipment as Equipment;
+    return { equipment: equipment as Equipment, error: null };
   } catch (error) {
     console.error("Equipment fetch failed:", error);
-    return null;
+    return {
+      equipment: null,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Unable to load this equipment listing.",
+    };
   }
 }
 
@@ -106,7 +118,29 @@ async function EquipmentDetails({
   params,
 }: PageProps) {
   const { id } = await params;
-  const equipment = await getEquipment(id);
+  const result = await getEquipment(id);
+
+  if (result.error) {
+    return (
+      <main className="mx-auto flex min-h-[65vh] max-w-4xl flex-col items-center justify-center px-6 text-center">
+        <Package size={56} className="mb-5 text-destructive" />
+        <h1 className="text-3xl font-bold text-foreground">
+          Unable to Load Equipment
+        </h1>
+        <p role="alert" className="mt-3 text-muted-foreground">
+          {result.error}
+        </p>
+        <ButtonLink
+          href={`/equipment/${encodeURIComponent(id)}`}
+          className="mt-6"
+        >
+          Try Again
+        </ButtonLink>
+      </main>
+    );
+  }
+
+  const equipment = result.equipment;
 
   if (!equipment) {
     return (
