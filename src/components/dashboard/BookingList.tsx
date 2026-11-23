@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CalendarDays,
   CreditCard,
@@ -81,8 +81,10 @@ export default function BookingList({
   const [statusFilter, setStatusFilter] = useState("");
   const [search, setSearch] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
+  const loadRequestId = useRef(0);
 
   const load = useCallback(async () => {
+    const requestId = ++loadRequestId.current;
     setLoading(true);
     setError("");
 
@@ -111,13 +113,19 @@ export default function BookingList({
         );
       }
 
-      setBookings(Array.isArray(result.data) ? result.data : []);
+      if (requestId === loadRequestId.current) {
+        setBookings(Array.isArray(result.data) ? result.data : []);
+      }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to load bookings"
-      );
+      if (requestId === loadRequestId.current) {
+        setError(
+          err instanceof Error ? err.message : "Unable to load bookings"
+        );
+      }
     } finally {
-      setLoading(false);
+      if (requestId === loadRequestId.current) {
+        setLoading(false);
+      }
     }
   }, [scope, statusFilter, search]);
 
