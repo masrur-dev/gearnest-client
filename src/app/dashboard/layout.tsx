@@ -1,5 +1,6 @@
 
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardTopbar from "@/components/dashboard/DashboardTopbar";
@@ -11,6 +12,13 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 /**
  * The dashboard is intentionally blocking: it streams in after the
